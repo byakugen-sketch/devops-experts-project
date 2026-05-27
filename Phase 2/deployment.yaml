@@ -28,6 +28,20 @@ spec:
                 secretKeyRef:
                   name: flask-secret
                   key: SECRET_KEY
+          livenessProbe:
+            httpGet:
+              path: /health                                     # Endpoint to probe
+              port: 5000
+            initialDelaySeconds: 10                            # Wait 10s before first check (app needs time to start)
+            periodSeconds: 10                                  # Check every 10 seconds
+            failureThreshold: 3                                # Restart pod after 3 consecutive failures
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5                             # Check readiness sooner than liveness
+            periodSeconds: 5                                   # Check more frequently - affects traffic routing
+            failureThreshold: 3                                # Remove from load balancer after 3 failures
           resources:
             requests:
               cpu: "100m"                                       # Baseline CPU this pod is guaranteed (100 millicores = 0.1 CPU)
