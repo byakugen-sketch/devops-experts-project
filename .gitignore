@@ -4,3 +4,4 @@ CLAUDE.md
 __pycache__/
 *.pyc
 Phase 2/secret.yaml
+Phase 3/jenkins/kubeconfig
