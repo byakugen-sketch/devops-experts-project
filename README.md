@@ -10,6 +10,14 @@ A simple Python Flask application that returns a "Hello, Doron!" message.
 
 ---
 
+## Pull from Docker Hub
+
+```bash
+docker run -p 5000:5000 uzumaki420/devops-experts-project:latest
+```
+
+---
+
 ## Run with Docker
 
 ### 1. Build the image
