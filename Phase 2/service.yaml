@@ -3,12 +3,12 @@ kind: Service              # The type of resource we're creating
 metadata:
   name: flask-service      # Name of this Service inside the cluster
 spec:
-  type: NodePort           # Exposes the Service on a port of the Minikube node
-                           # Other options: ClusterIP (internal only), LoadBalancer (cloud)
+  type: LoadBalancer       # Exposes the Service externally via a dedicated IP
+                           # On cloud providers this provisions a real load balancer
+                           # On Minikube, use "minikube tunnel" to simulate this
   selector:
     app: flask-app         # Routes traffic to pods with this label (matches our Deployment)
   ports:
     - protocol: TCP
-      port: 80             # Port the Service listens on inside the cluster
+      port: 80             # Port the Service listens on externally
       targetPort: 5000     # Port on the pod to forward traffic to (Flask app port)
-      nodePort: 30007      # Port on the Minikube node exposed to your machine (30000-32767)
