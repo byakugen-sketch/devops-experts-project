@@ -93,6 +93,8 @@ kubectl apply -f secret.yaml
 Contains:
 - `SECRET_KEY` — Flask secret key used for session signing
 
+> **Note:** `secret.yaml` is intentionally excluded from version control via `.gitignore`. Committing secrets to a repository — even a private one — is a critical security risk. Once a secret is pushed to git, it lives in the commit history permanently and can be extracted even after deletion. This is standard practice from real-world production environments where exposed credentials have caused serious security incidents. In production, secrets are managed through dedicated tools such as HashiCorp Vault, AWS Secrets Manager, or Kubernetes Sealed Secrets — never stored in plain text in source control.
+
 ### CronJobs
 
 **`cronjob-healthcheck.yaml`** — runs every minute, pings the Flask app and verifies it returns the expected response. Exits with code 1 if the check fails.
