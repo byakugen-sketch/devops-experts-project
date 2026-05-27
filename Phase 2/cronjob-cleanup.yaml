@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: flask-cleanup               # Name of the CronJob
+spec:
+  schedule: "0 * * * *"            # Runs once every hour
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: cleanup
+              image: busybox:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Running cleanup task at $(date)"
+                  echo "Clearing temporary files..."
+                  rm -rf /tmp/*
+                  echo "Cleanup complete"
