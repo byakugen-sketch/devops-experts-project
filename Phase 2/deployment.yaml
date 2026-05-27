@@ -1,0 +1,24 @@
+apiVersion: apps/v1        # The Kubernetes API version for Deployments
+kind: Deployment           # The type of resource we're creating
+metadata:
+  name: flask-app          # Name of this Deployment inside the cluster
+  labels:
+    app: flask-app         # Label used to identify and group related resources
+spec:
+  replicas: 2              # Run 2 identical pods for basic availability
+  selector:
+    matchLabels:
+      app: flask-app       # The Deployment manages pods with this label
+  template:                # Blueprint for each pod the Deployment creates
+    metadata:
+      labels:
+        app: flask-app     # Must match the selector above
+    spec:
+      containers:
+        - name: flask-app                                        # Name of the container inside the pod
+          image: uzumaki420/devops-experts-project:latest       # Docker Hub image to pull
+          ports:
+            - containerPort: 5000                               # Port the Flask app listens on
+          env:
+            - name: FLASK_DEBUG                                 # Pass env vars into the container
+              value: "false"
