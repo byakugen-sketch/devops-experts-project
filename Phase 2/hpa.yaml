@@ -1,0 +1,18 @@
+apiVersion: autoscaling/v2        # v2 supports multiple metric types (CPU, memory, custom)
+kind: HorizontalPodAutoscaler
+metadata:
+  name: flask-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: flask-app               # The Deployment this HPA manages
+  minReplicas: 2                  # Never scale below 2 pods
+  maxReplicas: 10                 # Never scale above 10 pods
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50  # Scale up when average CPU across all pods exceeds 50% of their request

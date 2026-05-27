@@ -22,3 +22,8 @@ spec:
           env:
             - name: FLASK_DEBUG                                 # Pass env vars into the container
               value: "false"
+          resources:
+            requests:
+              cpu: "100m"                                       # Baseline CPU this pod is guaranteed (100 millicores = 0.1 CPU)
+            limits:
+              cpu: "200m"                                       # Max CPU this pod can use before being throttled
