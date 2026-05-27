@@ -19,9 +19,15 @@ spec:
           image: uzumaki420/devops-experts-project:latest       # Docker Hub image to pull
           ports:
             - containerPort: 5000                               # Port the Flask app listens on
+          envFrom:
+            - configMapRef:
+                name: flask-config                             # Injects all keys from ConfigMap as env vars
           env:
-            - name: FLASK_DEBUG                                 # Pass env vars into the container
-              value: "false"
+            - name: SECRET_KEY                                 # Injected individually from the Secret
+              valueFrom:
+                secretKeyRef:
+                  name: flask-secret
+                  key: SECRET_KEY
           resources:
             requests:
               cpu: "100m"                                       # Baseline CPU this pod is guaranteed (100 millicores = 0.1 CPU)

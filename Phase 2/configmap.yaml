@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flask-config              # Referenced by name in the Deployment
+data:
+  FLASK_DEBUG: "false"            # Non-sensitive config values live here
+  APP_NAME: "devops-experts-project"
