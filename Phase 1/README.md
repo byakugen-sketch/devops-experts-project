@@ -1,24 +1,42 @@
-# devops-experts-project
+# Phase 1 — Flask Application & Docker
 
-A simple Python Flask application that returns a "Hello, Doron!" message.
-
----
-
-## Requirements
-
-- [Docker](https://www.docker.com/products/docker-desktop)
+A simple Python Flask application containerized with Docker and published to Docker Hub.
 
 ---
 
-## Pull from Docker Hub
+## Application
 
+Built with Flask, the app exposes two endpoints:
+
+| Endpoint | Method | Response |
+|----------|--------|----------|
+| `/` | GET | `Hello, Doron!` |
+| `/health` | GET | `{"status": "healthy"}` |
+
+The `/health` endpoint is used by Kubernetes liveness and readiness probes in Phase 2.
+
+---
+
+## Prerequisites
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+
+---
+
+## Docker Hub
+
+The image is published at:
+
+**`docker.io/uzumaki420/devops-experts-project:latest`**
+
+Pull and run directly without building locally:
 ```bash
 docker run -p 5000:5000 uzumaki420/devops-experts-project:latest
 ```
 
 ---
 
-## Run with Docker
+## Build and Run Locally
 
 ### 1. Build the image
 ```bash
@@ -46,6 +64,11 @@ To stop:
 docker-compose down
 ```
 
+Enable debug mode:
+```bash
+FLASK_DEBUG=true docker-compose up
+```
+
 ---
 
 ## Run Locally (without Docker)
@@ -55,7 +78,15 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Enable debug mode:
-```bash
-FLASK_DEBUG=true python app.py
+---
+
+## Project Structure
+
+```
+Phase 1/
+├── app.py               # Flask application
+├── requirements.txt     # Python dependencies
+├── Dockerfile           # Docker image definition
+├── docker-compose.yml   # Docker Compose configuration
+└── .dockerignore        # Files excluded from the Docker build context
 ```
