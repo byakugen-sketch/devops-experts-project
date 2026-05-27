@@ -1,9 +1,9 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: flask-cleanup               # Name of the CronJob
+  name: flask-cleanup
 spec:
-  schedule: "0 * * * *"            # Runs once every hour
+  schedule: "0 * * * *"
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
@@ -20,6 +20,5 @@ spec:
                 - -c
                 - |
                   echo "Running cleanup task at $(date)"
-                  echo "Clearing temporary files..."
                   rm -rf /tmp/*
                   echo "Cleanup complete"

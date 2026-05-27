@@ -9,9 +9,6 @@ def home():
 
 @app.route("/health")
 def health():
-    # Liveness and readiness probes hit this endpoint
-    # Return 200 OK when the app is healthy and ready
-    # In a real app this might check DB connections, cache availability etc.
     return jsonify({"status": "healthy"}), 200
 
 if __name__ == "__main__":

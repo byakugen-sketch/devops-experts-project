@@ -1,49 +1,49 @@
-apiVersion: apps/v1        # The Kubernetes API version for Deployments
-kind: Deployment           # The type of resource we're creating
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: flask-app          # Name of this Deployment inside the cluster
+  name: flask-app
   labels:
-    app: flask-app         # Label used to identify and group related resources
+    app: flask-app
 spec:
-  replicas: 2              # Run 2 identical pods for basic availability
+  replicas: 2
   selector:
     matchLabels:
-      app: flask-app       # The Deployment manages pods with this label
-  template:                # Blueprint for each pod the Deployment creates
+      app: flask-app
+  template:
     metadata:
       labels:
-        app: flask-app     # Must match the selector above
+        app: flask-app
     spec:
       containers:
-        - name: flask-app                                        # Name of the container inside the pod
-          image: uzumaki420/devops-experts-project:latest       # Docker Hub image to pull
+        - name: flask-app
+          image: uzumaki420/devops-experts-project:latest
           ports:
-            - containerPort: 5000                               # Port the Flask app listens on
+            - containerPort: 5000
           envFrom:
             - configMapRef:
-                name: flask-config                             # Injects all keys from ConfigMap as env vars
+                name: flask-config
           env:
-            - name: SECRET_KEY                                 # Injected individually from the Secret
+            - name: SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   name: flask-secret
                   key: SECRET_KEY
           livenessProbe:
             httpGet:
-              path: /health                                     # Endpoint to probe
+              path: /health
               port: 5000
-            initialDelaySeconds: 10                            # Wait 10s before first check (app needs time to start)
-            periodSeconds: 10                                  # Check every 10 seconds
-            failureThreshold: 3                                # Restart pod after 3 consecutive failures
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /health
               port: 5000
-            initialDelaySeconds: 5                             # Check readiness sooner than liveness
-            periodSeconds: 5                                   # Check more frequently - affects traffic routing
-            failureThreshold: 3                                # Remove from load balancer after 3 failures
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
           resources:
             requests:
-              cpu: "100m"                                       # Baseline CPU this pod is guaranteed (100 millicores = 0.1 CPU)
+              cpu: "100m"
             limits:
-              cpu: "200m"                                       # Max CPU this pod can use before being throttled
+              cpu: "200m"
