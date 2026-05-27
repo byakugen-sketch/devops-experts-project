@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Release.Name }}-healthcheck
+spec:
+  schedule: {{ .Values.cronjobs.healthcheck.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: healthcheck
+              image: busybox:latest
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "Running health check at $(date)"
+                  RESPONSE=$(wget -q -O- http://{{ .Release.Name }}-service:{{ .Values.service.port }})
+                  echo "Response: $RESPONSE"
+                  if [ "$RESPONSE" = "Hello, Doron!" ]; then
+                    echo "Health check PASSED"
+                  else
+                    echo "Health check FAILED"
+                    exit 1
+                  fi
